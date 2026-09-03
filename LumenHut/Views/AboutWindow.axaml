@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="using:LumenHut.Services"
+        x:Class="LumenHut.Views.AboutWindow"
+        x:DataType="services:Strings"
+        Title="{Binding AboutTitle}"
+        Width="420" Height="440"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/avalonia-logo.ico"
+        Background="{DynamicResource BrandPageBrush}">
+
+    <DockPanel Margin="28">
+        <Button DockPanel.Dock="Bottom"
+                Content="{Binding Close}"
+                Classes="accent"
+                HorizontalAlignment="Right"
+                Margin="0,20,0,0"
+                Click="Close_OnClick"/>
+
+        <StackPanel Spacing="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Canvas Width="96" Height="96" HorizontalAlignment="Center">
+                <Ellipse Width="96" Height="96" Fill="{DynamicResource BrandPrimaryBrush}"/>
+                <Path Data="M26,50 L48,32 L70,50"
+                      Stroke="{DynamicResource BrandOnPrimaryBrush}"
+                      StrokeThickness="4" StrokeLineCap="Round" StrokeJoin="Round"/>
+                <Path Data="M32,48 V72 H64 V48"
+                      Stroke="{DynamicResource BrandOnPrimaryBrush}"
+                      StrokeThickness="4" StrokeLineCap="Round" StrokeJoin="Round"/>
+                <Ellipse Canvas.Left="41" Canvas.Top="54" Width="14" Height="14"
+                         Fill="{DynamicResource BrandOnPrimaryBrush}"/>
+            </Canvas>
+
+            <TextBlock Text="LumenHut"
+                       Classes="display"
+                       FontSize="22" FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource BrandPrimaryBrush}"/>
+
+            <TextBlock Text="{Binding AboutSubtitle}"
+                       FontSize="13" TextWrapping="Wrap" TextAlignment="Center"
+                       MaxWidth="300"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource BrandMutedBrush}"/>
+
+            <TextBlock x:Name="VersionText"
+                       FontSize="13"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource BrandMutedBrush}"/>
+
+            <TextBlock Text="© Managentis"
+                       FontSize="13"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,0"
+                       Foreground="{DynamicResource BrandTextBrush}"/>
+
+            <Button Content="managentis.com"
+                    Classes="link"
+                    HorizontalAlignment="Center"
+                    Click="Website_OnClick"
+                    ToolTip.Tip="{Binding AboutWebsiteTooltip}"/>
+        </StackPanel>
+    </DockPanel>
+</Window>

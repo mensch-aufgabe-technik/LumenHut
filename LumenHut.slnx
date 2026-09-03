@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LumenHut.Tests/LumenHut.Tests.csproj" />
+  <Project Path="LumenHut/LumenHut.csproj" />
+</Solution>

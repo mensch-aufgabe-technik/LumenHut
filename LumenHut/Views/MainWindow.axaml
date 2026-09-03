@@ -1,0 +1,97 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LumenHut.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
+        x:Class="LumenHut.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="{Binding S.WindowTitle}"
+        Width="1100" Height="820"
+        MinWidth="920" MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <!-- Both modifiers on purpose: Ctrl is what Windows users reach for, Cmd what macOS users do. -->
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+R" Command="{Binding Measure.RunTestCommand}"/>
+        <KeyBinding Gesture="Cmd+R" Command="{Binding Measure.RunTestCommand}"/>
+        <KeyBinding Gesture="Ctrl+E" Command="{Binding Measure.ExportMarkdownCommand}"/>
+        <KeyBinding Gesture="Cmd+E" Command="{Binding Measure.ExportMarkdownCommand}"/>
+        <KeyBinding Gesture="Ctrl+D1" Command="{Binding NavigateCommand}" CommandParameter="measure"/>
+        <KeyBinding Gesture="Cmd+D1" Command="{Binding NavigateCommand}" CommandParameter="measure"/>
+        <KeyBinding Gesture="Ctrl+D2" Command="{Binding NavigateCommand}" CommandParameter="history"/>
+        <KeyBinding Gesture="Cmd+D2" Command="{Binding NavigateCommand}" CommandParameter="history"/>
+        <KeyBinding Gesture="Ctrl+D3" Command="{Binding NavigateCommand}" CommandParameter="settings"/>
+        <KeyBinding Gesture="Cmd+D3" Command="{Binding NavigateCommand}" CommandParameter="settings"/>
+    </Window.KeyBindings>
+
+    <DockPanel Margin="20" LastChildFill="True">
+
+        <!-- Hero-Streifen: Wortmarke links, Navigation rechts -->
+        <Border DockPanel.Dock="Top" Classes="hero-strip" Margin="0,0,0,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Orientation="Horizontal" Spacing="14">
+                    <!-- Wortmarke: Hütte mit Licht darin (Vektor, damit kein Bild-Asset nötig ist) -->
+                    <Viewbox Width="42" Height="42" VerticalAlignment="Center">
+                        <Canvas Width="26" Height="26">
+                            <Path Data="M3,12 L13,4 L23,12"
+                                  Stroke="{DynamicResource BrandHeroTextBrush}"
+                                  StrokeThickness="1.8" StrokeLineCap="Round" StrokeJoin="Round"/>
+                            <Path Data="M5.5,11.5 V21.5 H20.5 V11.5"
+                                  Stroke="{DynamicResource BrandHeroTextBrush}"
+                                  StrokeThickness="1.8" StrokeLineCap="Round" StrokeJoin="Round"/>
+                            <Ellipse Canvas.Left="10" Canvas.Top="14.5" Width="6" Height="6"
+                                     Fill="{DynamicResource BrandOnPrimaryBrush}"/>
+                        </Canvas>
+                    </Viewbox>
+
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                        <TextBlock Text="{Binding S.BrandEyebrow}" Classes="eyebrow"
+                                   Foreground="{DynamicResource BrandHeroEyebrowBrush}"/>
+                        <TextBlock Text="LumenHut" Classes="display"
+                                   FontSize="22" FontWeight="Bold" LetterSpacing="-0.2"
+                                   Foreground="{DynamicResource BrandOnPrimaryBrush}"/>
+                        <TextBlock Text="{Binding S.BrandSubtitle}"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource BrandHeroTextBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4"
+                            VerticalAlignment="Center">
+                    <ItemsControl ItemsSource="{Binding Navigation}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NavigationItem">
+                                <Button Content="{Binding Title}"
+                                        Classes="nav"
+                                        Classes.active="{Binding IsActive}"
+                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).NavigateCommand}"
+                                        CommandParameter="{Binding Key}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Button Content="{Binding S.NavAboutShort}"
+                            Classes="nav"
+                            Margin="8,0,0,0"
+                            Click="About_OnClick"
+                            ToolTip.Tip="{Binding S.NavAboutTooltip}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Padding="0,0,4,0">
+            <ContentControl Content="{Binding CurrentPage}"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

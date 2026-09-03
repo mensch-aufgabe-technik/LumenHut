@@ -1,0 +1,134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LumenHut.ViewModels"
+             x:Class="LumenHut.Views.HistoryView"
+             x:DataType="vm:HistoryViewModel">
+
+    <StackPanel Spacing="16" MaxWidth="760" HorizontalAlignment="Left">
+        <Border Classes="card">
+            <StackPanel Spacing="14">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right"
+                            Content="{Binding S.HistoryRefresh}"
+                            Classes="small"
+                            Command="{Binding LoadHistoryCommand}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"/>
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="{Binding S.HistoryTitle}" Classes="section-title"/>
+                        <TextBlock Text="{Binding S.HistorySubtitle}" Classes="hint"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <TextBlock Text="{Binding S.HistoryEmpty}" Classes="hint"
+                           IsVisible="{Binding !HasHistory}"/>
+
+                <ListBox ItemsSource="{Binding History}"
+                         SelectedItem="{Binding SelectedHistoryItem, Mode=TwoWay}"
+                         SelectionMode="Multiple"
+                         IsVisible="{Binding HasHistory}"
+                         SelectionChanged="History_OnSelectionChanged"
+                         DoubleTapped="History_OnDoubleTapped">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:TestRunSummary">
+                            <Grid ColumnDefinitions="*,150,130" ColumnSpacing="12">
+                                <TextBlock Grid.Column="0" Text="{Binding Url}"
+                                           FontSize="13" TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource BrandTextBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding BrowsersTested}"
+                                           FontSize="12" TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource BrandMutedBrush}"/>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding TimestampDisplay}"
+                                           FontSize="12" HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource BrandMutedBrush}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Orientation="Horizontal" Spacing="8"
+                            IsVisible="{Binding HasHistory}">
+                    <Button Content="{Binding S.HistoryLoad}"
+                            Classes="accent"
+                            Command="{Binding OpenSelectedCommand}"/>
+                    <Button Content="{Binding S.HistoryDelete}"
+                            Classes="small"
+                            Command="{Binding DeleteSelectedCommand}"/>
+                    <Button Content="{Binding S.HistoryCompare}"
+                            Classes="small"
+                            Command="{Binding CompareCommand}"/>
+                    <Button Content="{Binding ClearLabel}"
+                            Classes="small"
+                            Command="{Binding ClearHistoryCommand}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding S.HistoryCompareHint}" Classes="hint"
+                           TextWrapping="Wrap" IsVisible="{Binding HasHistory}"/>
+
+                <StackPanel Spacing="6" IsVisible="{Binding HasHistory}">
+                    <TextBlock Text="{Binding S.HistoryNoteLabel}" Classes="field-label"/>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding SelectedHistoryItem.Notes, Mode=TwoWay}"
+                                 PlaceholderText="{Binding S.HistoryNotePlaceholder}"
+                                 IsEnabled="{Binding SelectedHistoryItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                 AutomationProperties.Name="{Binding S.HistoryNoteLabel}"/>
+                        <Button Grid.Column="1"
+                                Content="{Binding S.HistoryNoteSave}"
+                                Classes="small"
+                                Command="{Binding SaveNoteCommand}"/>
+                    </Grid>
+                </StackPanel>
+
+                <TextBlock Text="{Binding StatusMessage}" Classes="hint"
+                           Foreground="{DynamicResource BrandErrorAccentBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Laufvergleich: älter gegen neuer, kleiner ist besser -->
+        <Border Classes="card" IsVisible="{Binding HasComparison}">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{Binding S.HistoryCompareTitle}" Classes="section-title"/>
+                <TextBlock Text="{Binding ComparisonHeader}" Classes="hint"/>
+                <TextBlock Text="{Binding S.HistoryCompareDifferentUrls}"
+                           IsVisible="{Binding ComparisonUrlsDiffer}"
+                           FontSize="12" TextWrapping="Wrap"
+                           Foreground="{DynamicResource BrandErrorAccentBrush}"/>
+
+                <Grid ColumnDefinitions="110,120,110,110,*" Margin="0,4,0,0">
+                    <TextBlock Grid.Column="0" Text="Browser" Classes="field-label"/>
+                    <TextBlock Grid.Column="1" Text="{Binding S.ExportTableMetric}" Classes="field-label"/>
+                    <TextBlock Grid.Column="2" Text="{Binding S.HistoryCompareOlder}" Classes="field-label"/>
+                    <TextBlock Grid.Column="3" Text="{Binding S.HistoryCompareNewer}" Classes="field-label"/>
+                    <TextBlock Grid.Column="4" Text="{Binding S.HistoryCompareDelta}" Classes="field-label"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Comparison}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ComparisonRow">
+                            <Grid ColumnDefinitions="110,120,110,110,*" Height="24">
+                                <TextBlock Grid.Column="0" Text="{Binding Browser}" FontSize="12"
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource BrandMutedBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Metric}" FontSize="12"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Older}" FontSize="12"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Newer}" FontSize="12"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="{Binding Delta}"
+                                           Classes="delta"
+                                           Classes.better="{Binding IsBetter}"
+                                           Classes.worse="{Binding IsWorse}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

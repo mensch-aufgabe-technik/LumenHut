@@ -1,0 +1,89 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LumenHut.ViewModels"
+             xmlns:services="using:LumenHut.Services"
+             x:Class="LumenHut.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <StackPanel Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
+        <Border Classes="card">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding S.SettingsNetworkSection}" Classes="section-title"/>
+
+                <TextBlock Text="{Binding S.ProxyLabel}" Classes="field-label"/>
+                <TextBox Text="{Binding ProxyServer}"
+                         PlaceholderText="{Binding S.ProxyPlaceholder}"
+                         AutomationProperties.Name="{Binding S.ProxyLabel}"/>
+                <TextBlock Text="{Binding S.ProxyHint}" Classes="hint"/>
+
+                <TextBlock Text="{Binding S.ProxyUserLabel}" Classes="field-label"/>
+                <TextBox Text="{Binding ProxyUsername}"
+                         AutomationProperties.Name="{Binding S.ProxyUserLabel}"/>
+
+                <TextBlock Text="{Binding S.ProxyPasswordLabel}" Classes="field-label"/>
+                <TextBox Text="{Binding ProxyPassword}"
+                         PasswordChar="●"
+                         AutomationProperties.Name="{Binding S.ProxyPasswordLabel}"/>
+                <TextBlock Text="{Binding S.ProxyPasswordHint}" Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding S.SettingsLanguageSection}" Classes="section-title"/>
+                <TextBlock Text="{Binding S.LanguageLabel}" Classes="field-label"/>
+                <ComboBox ItemsSource="{Binding Languages}"
+                          SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                          Width="200" HorizontalAlignment="Left"
+                          AutomationProperties.Name="{Binding S.LanguageLabel}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="services:LanguageOption">
+                            <TextBlock Text="{Binding Display}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="{Binding S.LanguageHint}" Classes="hint"/>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{Binding S.SettingsStorageSection}" Classes="section-title"/>
+                <TextBlock Text="{Binding S.StorageHint}" Classes="hint"/>
+                <SelectableTextBlock Text="{Binding DataDirectory}"
+                                     FontSize="12" TextWrapping="Wrap"
+                                     Foreground="{DynamicResource BrandTextBrush}"/>
+
+                <TextBlock Text="{Binding S.PrivacyStoredHint}" Classes="hint" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding S.PrivacyRetentionHint}" Classes="hint" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding S.PrivacyLogHint}" Classes="hint" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding S.PrivacyDownloadHint}" Classes="hint" TextWrapping="Wrap"/>
+
+                <TextBlock Text="{Binding S.RetentionLabel}" Classes="field-label" Margin="0,6,0,0"/>
+                <ComboBox ItemsSource="{Binding RetentionOptions}"
+                          SelectedItem="{Binding SelectedRetention, Mode=TwoWay}"
+                          Width="200" HorizontalAlignment="Left"
+                          AutomationProperties.Name="{Binding S.RetentionLabel}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:RetentionOption">
+                            <TextBlock Text="{Binding Display}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="{Binding S.RetentionHint}" Classes="hint" TextWrapping="Wrap"/>
+
+                <CheckBox Content="{Binding S.StoreFullUrlLabel}"
+                          IsChecked="{Binding StoreFullUrl}"
+                          Margin="0,4,0,0"/>
+                <TextBlock Text="{Binding S.StoreFullUrlHint}" Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button Content="{Binding S.Save}" Classes="accent" Command="{Binding SaveCommand}"/>
+            <TextBlock Text="{Binding StatusMessage}"
+                       VerticalAlignment="Center" FontSize="12"
+                       Foreground="{DynamicResource BrandMutedBrush}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

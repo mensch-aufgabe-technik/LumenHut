@@ -1,0 +1,219 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LumenHut.ViewModels"
+             xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
+             x:Class="LumenHut.Views.MeasureView"
+             x:DataType="vm:MeasureViewModel">
+
+    <StackPanel Spacing="16">
+
+        <!-- Eingabe: URL, Engines, Start -->
+        <Border Classes="card">
+            <StackPanel Spacing="14">
+                <TextBlock Text="{Binding S.MeasureTitle}" Classes="section-title"/>
+
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{Binding S.UrlLabel}" Classes="field-label"/>
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding Url}"
+                                 PlaceholderText="{Binding S.UrlPlaceholder}"
+                                 AutomationProperties.Name="{Binding S.UrlLabel}">
+                            <TextBox.KeyBindings>
+                                <KeyBinding Gesture="Enter" Command="{Binding RunTestCommand}"/>
+                            </TextBox.KeyBindings>
+                        </TextBox>
+                        <Button Grid.Column="1"
+                                Classes="accent"
+                                Content="{Binding S.RunMeasurement}"
+                                Command="{Binding RunTestCommand}"/>
+                        <Button Grid.Column="2"
+                                Content="{Binding S.CancelMeasurement}"
+                                Command="{Binding CancelTestCommand}"
+                                IsVisible="{Binding IsRunning}"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{Binding S.EnginesLabel}" Classes="field-label"/>
+                    <StackPanel Orientation="Horizontal" Spacing="20">
+                        <CheckBox Content="Chromium" IsChecked="{Binding UseChromium}"/>
+                        <CheckBox Content="Firefox" IsChecked="{Binding UseFirefox}"/>
+                        <CheckBox Content="WebKit" IsChecked="{Binding UseWebKit}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding S.EngineSupportHint}" Classes="hint" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,6,0,0">
+                        <TextBlock Text="{Binding S.RepeatLabel}" Classes="field-label"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox ItemsSource="{Binding RepeatOptions}"
+                                  SelectedItem="{Binding SelectedRepeat, Mode=TwoWay}"
+                                  Width="210"
+                                  AutomationProperties.Name="{Binding S.RepeatLabel}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:RepeatOption">
+                                    <TextBlock Text="{Binding Display}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <TextBlock Text="{Binding S.RepeatHint}" Classes="hint" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding S.WebKitHint}" Classes="hint" TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Status: eine ruhige Notizzeile, während der Messung mit Fortschrittsbalken -->
+        <Border Background="{DynamicResource BrandNoticeBgBrush}"
+                BorderBrush="{DynamicResource BrandNoticeBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="14,10">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <TextBlock Grid.Column="0"
+                           Text="{Binding StatusMessage}"
+                           TextWrapping="Wrap"
+                           FontSize="13"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource BrandNoticeTextBrush}"/>
+                <ProgressBar Grid.Column="1"
+                             IsIndeterminate="True"
+                             Width="120"
+                             VerticalAlignment="Center"
+                             IsVisible="{Binding IsRunning}"/>
+            </Grid>
+        </Border>
+
+        <!-- Ergebnisse -->
+        <Border Classes="card">
+            <StackPanel Spacing="14">
+                <DockPanel>
+                    <TextBlock Text="{Binding S.ResultsTitle}" Classes="section-title"
+                               DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8"
+                                HorizontalAlignment="Right" IsVisible="{Binding HasResults}">
+                        <Button Content="{Binding S.ExportJson}" Classes="small"
+                                Command="{Binding ExportJsonCommand}"/>
+                        <Button Content="{Binding S.ExportMarkdown}" Classes="small"
+                                Command="{Binding ExportMarkdownCommand}"/>
+                        <Button Content="{Binding S.ExportCsv}" Classes="small"
+                                Command="{Binding ExportCsvCommand}"/>
+                        <Button Content="{Binding S.CopyToClipboard}" Classes="small"
+                                Command="{Binding CopyToClipboardCommand}"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <TextBlock Text="{Binding S.NoResults}" Classes="hint"
+                           IsVisible="{Binding !HasResults}"/>
+
+                <ItemsControl ItemsSource="{Binding CurrentResults}" IsVisible="{Binding HasResults}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:BrowserResultView">
+                            <Border Background="{DynamicResource BrandSurfaceAltBrush}"
+                                    BorderBrush="{DynamicResource BrandLineBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="16"
+                                    Width="286"
+                                    Margin="0,0,12,12">
+                                <StackPanel Spacing="10">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal"
+                                                    Spacing="6" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Browser}"
+                                                       FontSize="14" FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource BrandHeadingBrush}"/>
+                                            <TextBlock Text="{Binding EngineVersion}"
+                                                       IsVisible="{Binding HasEngineVersion}"
+                                                       FontSize="11" VerticalAlignment="Bottom"
+                                                       Margin="0,0,0,2"
+                                                       Foreground="{DynamicResource BrandMutedBrush}"/>
+                                        </StackPanel>
+                                        <Border DockPanel.Dock="Right"
+                                                IsVisible="{Binding Skipped}"
+                                                Background="{DynamicResource BrandErrorBgBrush}"
+                                                CornerRadius="4" Padding="6,2"
+                                                HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding $parent[UserControl].((vm:MeasureViewModel)DataContext).S.SkippedBadge}"
+                                                       FontSize="10" FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource BrandErrorBrush}"/>
+                                        </Border>
+                                    </DockPanel>
+
+                                    <TextBlock Text="{Binding SkipReason}"
+                                               IsVisible="{Binding Skipped}"
+                                               TextWrapping="Wrap"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource BrandErrorAccentBrush}"/>
+
+                                    <ItemsControl ItemsSource="{Binding Metrics}" IsVisible="{Binding !Skipped}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Spacing="0"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:MetricView">
+                                                <StackPanel ToolTip.Tip="{Binding Description}">
+                                                    <Grid ColumnDefinitions="14,*,Auto,34" Height="26">
+                                                        <Ellipse Grid.Column="0"
+                                                                 Classes="rating"
+                                                                 Classes.good="{Binding IsGood}"
+                                                                 Classes.warn="{Binding NeedsImprovement}"
+                                                                 Classes.poor="{Binding IsPoor}"
+                                                                 VerticalAlignment="Center"
+                                                                 HorizontalAlignment="Left"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                                                   FontSize="12" VerticalAlignment="Center"
+                                                                   Foreground="{DynamicResource BrandMutedBrush}"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding Value}"
+                                                                   Classes="metric-value" VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Column="3" Text="{Binding Unit}"
+                                                                   FontSize="11" Margin="6,0,0,0"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="{DynamicResource BrandMutedBrush}"/>
+                                                    </Grid>
+                                                    <TextBlock Text="{Binding Note}"
+                                                               IsVisible="{Binding HasNote}"
+                                                               FontSize="12" TextWrapping="Wrap"
+                                                               Margin="14,0,0,6"
+                                                               Foreground="{DynamicResource BrandMutedBrush}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="{Binding S.RatingLegend}" Classes="hint"
+                           TextWrapping="Wrap" IsVisible="{Binding HasResults}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- LCP-Vergleich -->
+        <Border Classes="card" IsVisible="{Binding HasResults}">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding S.ChartTitle}" Classes="section-title"/>
+                <ScottPlot:AvaPlot x:Name="LcpChart" Height="220"/>
+                <TextBlock Text="{Binding MissingLcpNote}"
+                           IsVisible="{Binding HasMissingLcp}"
+                           Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Einordnung: was diese Zahlen sind und was nicht -->
+        <Border Classes="card">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding S.HowToReadTitle}" Classes="section-title"/>
+                <TextBlock Text="{Binding S.HowToReadBody}" Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

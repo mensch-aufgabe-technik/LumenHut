@@ -1,0 +1,31 @@
+## .NET build output
+bin/
+obj/
+dist/
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.code-workspace
+
+## Messdaten und Protokolle, sollten sie je im Projektordner landen.
+## Die Anwendung schreibt nach LocalApplicationData, aber LUMENHUT_LOG_DIR kann
+## hierher zeigen — dann läge eine Datenbank mit gemessenen URLs im Repository.
+*.db
+*.db-shm
+*.db-wal
+lumenhut.log*
+settings.json
+
+## OS
+.DS_Store
+
+## Local tooling
+.claude/
+
+## Interne Arbeitsunterlagen, bleiben lokal
+CLAUDE.md
+UMSETZUNGSPLAN.md

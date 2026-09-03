@@ -1,0 +1,307 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LumenHut.App"
+             xmlns:local="using:LumenHut"
+             Name="LumenHut"
+             RequestedThemeVariant="Light">
+             <!-- Name steuert u. a. den macOS-Menüleisten-Titel. Festes Light-Theme: Markenfarbschema. -->
+
+    <!-- Das macOS-App-Menü („Über LumenHut…“ statt „About Avalonia“) wird in
+         App.axaml.cs aufgebaut, weil sein Text der gewählten Sprache folgt. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <!-- Managentis-Markenschriften (SIL Open Font License 1.1, eingebettet unter Assets/Fonts) -->
+        <FontFamily x:Key="BrandFontText">avares://LumenHut/Assets/Fonts/Mulish.ttf#Mulish</FontFamily>
+        <FontFamily x:Key="BrandFontDisplay">avares://LumenHut/Assets/Fonts/Unbounded.ttf#Unbounded</FontFamily>
+
+        <!-- Managentis-Markenpalette (Quelle: managentis.com) -->
+        <Color x:Key="BrandGreen900Color">#233e30</Color>
+        <Color x:Key="BrandGreen700Color">#3a5f4b</Color>
+        <Color x:Key="BrandGreen500Color">#6b8f7e</Color>
+        <Color x:Key="BrandGreen300Color">#9db5a6</Color>
+        <Color x:Key="BrandGreen100Color">#d6e4dc</Color>
+        <Color x:Key="BrandBlueColor">#5d84b6</Color>
+        <Color x:Key="BrandBlueHoverColor">#4d74a6</Color>
+        <Color x:Key="BrandBlue900Color">#294d73</Color>
+        <Color x:Key="BrandNavHoverColor">#3a648f</Color>
+        <Color x:Key="BrandHeroTextColor">#d7e2f0</Color>
+        <Color x:Key="BrandHeroEyebrowColor">#bcd2ec</Color>
+        <Color x:Key="BrandPageColor">#f2f0ec</Color>
+        <Color x:Key="BrandSurfaceColor">#ffffff</Color>
+        <Color x:Key="BrandSurfaceAltColor">#f7f6f3</Color>
+        <Color x:Key="BrandTextColor">#2d2d2d</Color>
+        <Color x:Key="BrandMutedColor">#5c6b62</Color>
+        <Color x:Key="BrandLineColor">#e8e6e2</Color>
+        <!-- Bewertungsskala fuer Messwerte (gruen/gelb/rot). Semantisch getrennt von den
+             Markenrollen: Gruen bleibt Struktur, Blau Handlung, Terracotta Fehler. -->
+        <Color x:Key="BrandAmberColor">#a86e1f</Color>
+        <Color x:Key="BrandTerracottaColor">#b05a45</Color>
+        <Color x:Key="BrandTerracottaDarkColor">#74301f</Color>
+        <Color x:Key="BrandTerracottaBgColor">#f6e4e0</Color>
+
+        <!-- Abgeleitete Brushes (in Views referenziert) -->
+        <SolidColorBrush x:Key="BrandPrimaryBrush" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="BrandPrimaryHoverBrush" Color="{StaticResource BrandGreen700Color}"/>
+        <SolidColorBrush x:Key="BrandOutlineBrush" Color="{StaticResource BrandGreen300Color}"/>
+        <SolidColorBrush x:Key="BrandAccentBrush" Color="{StaticResource BrandBlueColor}"/>
+        <SolidColorBrush x:Key="BrandAccentHoverBrush" Color="{StaticResource BrandBlueHoverColor}"/>
+        <SolidColorBrush x:Key="BrandAccentDeepBrush" Color="{StaticResource BrandBlue900Color}"/>
+        <SolidColorBrush x:Key="BrandNavHoverBrush" Color="{StaticResource BrandNavHoverColor}"/>
+        <SolidColorBrush x:Key="BrandHeroTextBrush" Color="{StaticResource BrandHeroTextColor}"/>
+        <SolidColorBrush x:Key="BrandHeroEyebrowBrush" Color="{StaticResource BrandHeroEyebrowColor}"/>
+        <SolidColorBrush x:Key="BrandHeadingBrush" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="BrandPageBrush" Color="{StaticResource BrandPageColor}"/>
+        <SolidColorBrush x:Key="BrandSurfaceBrush" Color="{StaticResource BrandSurfaceColor}"/>
+        <SolidColorBrush x:Key="BrandSurfaceAltBrush" Color="{StaticResource BrandSurfaceAltColor}"/>
+        <SolidColorBrush x:Key="BrandTextBrush" Color="{StaticResource BrandTextColor}"/>
+        <SolidColorBrush x:Key="BrandMutedBrush" Color="{StaticResource BrandMutedColor}"/>
+        <SolidColorBrush x:Key="BrandLineBrush" Color="{StaticResource BrandLineColor}"/>
+        <SolidColorBrush x:Key="BrandOnPrimaryBrush" Color="{StaticResource BrandSurfaceColor}"/>
+        <SolidColorBrush x:Key="BrandGreen100Brush" Color="{StaticResource BrandGreen100Color}"/>
+        <SolidColorBrush x:Key="BrandGreen500Brush" Color="{StaticResource BrandGreen500Color}"/>
+        <SolidColorBrush x:Key="BrandErrorBrush" Color="{StaticResource BrandTerracottaDarkColor}"/>
+        <SolidColorBrush x:Key="BrandErrorAccentBrush" Color="{StaticResource BrandTerracottaColor}"/>
+        <SolidColorBrush x:Key="BrandErrorBgBrush" Color="{StaticResource BrandTerracottaBgColor}"/>
+        <SolidColorBrush x:Key="BrandNoticeBgBrush" Color="{StaticResource BrandGreen100Color}"/>
+        <SolidColorBrush x:Key="BrandNoticeBorderBrush" Color="{StaticResource BrandGreen300Color}"/>
+        <SolidColorBrush x:Key="BrandNoticeTextBrush" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="BrandRatingGoodBrush" Color="{StaticResource BrandGreen700Color}"/>
+        <SolidColorBrush x:Key="BrandRatingWarnBrush" Color="{StaticResource BrandAmberColor}"/>
+        <SolidColorBrush x:Key="BrandRatingPoorBrush" Color="{StaticResource BrandTerracottaColor}"/>
+
+        <!-- Akzentfarbe fuer FluentTheme-Controls (CheckBox, Fokus, Auswahl): Markenblau der Palette -->
+        <Color x:Key="SystemAccentColor">#5d84b6</Color>
+        <Color x:Key="SystemAccentColorLight1">#7a9cc4</Color>
+        <Color x:Key="SystemAccentColorLight2">#98b3d3</Color>
+        <Color x:Key="SystemAccentColorLight3">#bcd2ec</Color>
+        <Color x:Key="SystemAccentColorDark1">#4d74a6</Color>
+        <Color x:Key="SystemAccentColorDark2">#3a648f</Color>
+        <Color x:Key="SystemAccentColorDark3">#294d73</Color>
+
+        <!-- Standard-Button ist der gruene Pill-Umriss; die Hauptaktion traegt Classes="accent".
+             Die Zustaende liegen in FluentTheme-Ressourcen, die Ruheform im Style unten. -->
+        <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource BrandGreen100Color}"/>
+        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource BrandGreen300Color}"/>
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent"/>
+        <SolidColorBrush x:Key="ButtonForeground" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{StaticResource BrandGreen900Color}"/>
+        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{StaticResource BrandGreen300Color}"/>
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource BrandGreen300Color}"/>
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource BrandGreen700Color}"/>
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{StaticResource BrandGreen700Color}"/>
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{StaticResource BrandLineColor}"/>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- Differenz im Laufvergleich: kleiner ist besser, also gruen bei negativer Differenz -->
+        <Style Selector="TextBlock.delta">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandMutedBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.delta.better">
+            <Setter Property="Foreground" Value="{DynamicResource BrandRatingGoodBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.delta.worse">
+            <Setter Property="Foreground" Value="{DynamicResource BrandRatingPoorBrush}"/>
+        </Style>
+
+        <!-- Bewertungspunkt neben einem Messwert; die Klasse setzt das ViewModel ueber den Rating-Zustand -->
+        <Style Selector="Ellipse.rating">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Fill" Value="Transparent"/>
+        </Style>
+        <Style Selector="Ellipse.rating.good">
+            <Setter Property="Fill" Value="{DynamicResource BrandRatingGoodBrush}"/>
+        </Style>
+        <Style Selector="Ellipse.rating.warn">
+            <Setter Property="Fill" Value="{DynamicResource BrandRatingWarnBrush}"/>
+        </Style>
+        <Style Selector="Ellipse.rating.poor">
+            <Setter Property="Fill" Value="{DynamicResource BrandRatingPoorBrush}"/>
+        </Style>
+
+        <!-- Markenschrift: Mulish als Standard, Unbounded fuer .display (Wortmarke/Ueberschriften) -->
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontText}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandTextBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource BrandPageBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.display">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontDisplay}"/>
+        </Style>
+
+        <!-- Standard-Button: Pill-Umriss in Markengruen, Beschriftung in Unbounded -->
+        <Style Selector="Button">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontDisplay}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+        </Style>
+
+        <!-- Hauptaktion: gefuelltes Markenblau (Gruen = Rahmen, Blau = Handlung) -->
+        <Style Selector="Button.accent">
+            <Setter Property="Background" Value="{DynamicResource BrandAccentBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandAccentBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,9"/>
+        </Style>
+        <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandAccentHoverBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandAccentHoverBrush}"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+        </Style>
+        <Style Selector="Button.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandAccentDeepBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandAccentDeepBrush}"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+        </Style>
+
+        <!-- Kompakter Button (z. B. Neben-Aktionen) -->
+        <Style Selector="Button.small">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <!-- Navigationsbutton im Hero-Streifen -->
+        <Style Selector="Button.nav">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandHeroTextBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="Button.nav:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandNavHoverBrush}"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+        </Style>
+        <!-- Aktiver Navigationseintrag -->
+        <Style Selector="Button.nav.active /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandAccentBrush}"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+        </Style>
+        <Style Selector="Button.nav.active">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandOnPrimaryBrush}"/>
+        </Style>
+
+        <Style Selector="Button.link">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontText}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandAccentDeepBrush}"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource BrandAccentBrush}"/>
+        </Style>
+
+        <!-- Hero-Streifen: tiefblaues Band ueber der Seite, wie der Hero auf managentis.com -->
+        <Style Selector="Border.hero-strip">
+            <Setter Property="Background" Value="{DynamicResource BrandAccentDeepBrush}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="16,14"/>
+        </Style>
+
+        <!-- Karten-Flaeche: weisses Panel mit feiner Linie und weichem Schatten -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{DynamicResource BrandSurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandLineBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="BoxShadow" Value="0 1 2 0 #0F233E30, 0 12 28 -10 #2E233E30"/>
+        </Style>
+
+        <!-- Seitentitel und Abschnittsueberschriften -->
+        <Style Selector="TextBlock.eyebrow">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontDisplay}"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="LetterSpacing" Value="0.4"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandGreen500Brush}"/>
+        </Style>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontDisplay}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandHeadingBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.field-label">
+            <Setter Property="FontFamily" Value="{StaticResource BrandFontDisplay}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandMutedBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.hint">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandMutedBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <!-- Formularfelder: Markenlinie statt Fluent-Grau -->
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="MinHeight" Value="34"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandLineBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource BrandSurfaceBrush}"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="MinHeight" Value="34"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrandLineBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource BrandSurfaceBrush}"/>
+        </Style>
+
+        <!-- Fortschritt: schmales Band in Markenblau -->
+        <Style Selector="ProgressBar">
+            <Setter Property="Foreground" Value="{DynamicResource BrandAccentBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource BrandGreen100Brush}"/>
+            <Setter Property="Height" Value="6"/>
+            <Setter Property="CornerRadius" Value="3"/>
+        </Style>
+
+        <!-- Messwert-Tabelle: Werte rechtsbuendig, damit Spalten ruhig stehen -->
+        <Style Selector="TextBlock.metric-value">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrandHeadingBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <!-- Verlaufsliste: flache Zeilen ohne Fluent-Rahmen -->
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandGreen100Brush}"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BrandGreen100Brush}"/>
+        </Style>
+    </Application.Styles>
+</Application>
