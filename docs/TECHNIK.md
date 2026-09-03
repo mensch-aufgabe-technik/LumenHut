@@ -9,13 +9,15 @@ nicht wiederholt.
 
 ## Für die Verteilung bauen
 
-Eigenständige Einzeldateien, die keine installierte .NET-Laufzeit brauchen. Die Befehle aus dem
-Projektverzeichnis `LumenHut/` heraus aufrufen:
+Eigenständige Einzeldateien, die keine installierte .NET-Laufzeit brauchen. Die Befehle vom
+Repository-Root aus aufrufen und `LumenHut/LumenHut.csproj` explizit angeben. Ein bloßes
+`dotnet publish` im Root veröffentlicht die Solution, was mit `--output` nicht unterstützt
+wird (NETSDK1194) und zusätzlich das Testprojekt als Einzeldatei bauen würde (NETSDK1098).
 
 ```bash
-dotnet publish -c Release -r win-x64   -p:PublishSingleFile=true -o ../dist/win-x64
-dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -o ../dist/osx-arm64
-dotnet publish -c Release -r osx-x64   -p:PublishSingleFile=true -o ../dist/osx-x64
+dotnet publish LumenHut/LumenHut.csproj -c Release -r win-x64   -p:PublishSingleFile=true -o dist/win-x64
+dotnet publish LumenHut/LumenHut.csproj -c Release -r osx-arm64 -p:PublishSingleFile=true -o dist/osx-arm64
+dotnet publish LumenHut/LumenHut.csproj -c Release -r osx-x64   -p:PublishSingleFile=true -o dist/osx-x64
 ```
 
 Ergebnis: `dist/win-x64/LumenHut.exe` (eine Datei, rund 110 MB) beziehungsweise
