@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <!-- `dotnet publish` on the solution would otherwise apply PublishSingleFile to this
+         project and fail with NETSDK1098 (test assemblies have no apphost). -->
+    <IsPublishable>false</IsPublishable>
     <AssemblyName>LumenHut.Tests</AssemblyName>
     <RootNamespace>LumenHut.Tests</RootNamespace>
   </PropertyGroup>
